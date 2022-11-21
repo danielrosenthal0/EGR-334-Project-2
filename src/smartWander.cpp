@@ -156,7 +156,7 @@ void Avoid(){
   analogWrite(red_LED, 255);
   analogWrite(grn_LED, 255);
   //Serial.println(error);
-  drive(error, error);
+  drive(-error, -error);
 
  //for lab 3- this is where you will add your P,I,D control to your Romi (the above is for the project)
 
