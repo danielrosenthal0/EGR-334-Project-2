@@ -75,8 +75,9 @@ void avoidObstacle(){
   analogWrite(grn_LED, 255);
   float gain;
   gain = 1;
+  readSonar();
   error = inches*gain;
-  drive(error,error);
+  drive(-error,-error);
   while (!chassis.checkMotionComplete()) {delay(1);}
   turn(180,30);
   while (!chassis.checkMotionComplete()) {delay(1);}
