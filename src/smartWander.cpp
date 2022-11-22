@@ -69,18 +69,16 @@ void turn(float ang, float speed)     //helper function to turn a set angle (deg
 
 //TO DO: Modify avoid Obstacle behavior with collide and avoid primitive behaviors
 void avoidObstacle(){ 
-  
   analogWrite(blue_LED, 255);
   analogWrite(red_LED, 255);
   analogWrite(grn_LED, 255);
   float gain;
   gain = 1;
-  readSonar();
-  error = inches*gain;
-  drive(-error,-error);
-  while (!chassis.checkMotionComplete()) {delay(1);}
-  turn(180,30);
-  while (!chassis.checkMotionComplete()) {delay(1);}
+  error = 18 - gain*inches;
+  drive(-error*2,-error*2);
+  Serial.println(-error);
+  //turn(180,30);
+  //while (!chassis.checkMotionComplete()) {delay(10);}
 
 //TO DO: Robot runAway behavior to move away proportional to obstacle.
 }
@@ -113,12 +111,12 @@ void setup() // runs this once at beginning
 void loop() //run continuously on the microcontroller
 {
   srand(millis());
-  int randBlue = rand() %255;
-  int randGreen = rand() % 254;
-  int randRed = rand() % 253;
-  analogWrite(red_LED, randRed);
-  analogWrite(grn_LED, randGreen);
-  analogWrite(blue_LED, randBlue);
+  // int randBlue = rand() %255;
+  // int randGreen = rand() % 254;
+  // int randRed = rand() % 253;
+  // analogWrite(red_LED, randRed);
+  // analogWrite(grn_LED, randGreen);
+  // analogWrite(blue_LED, randBlue);
   readSonar();
   delay(100);                                  //read code and sonar recharge delay
   if (inches < wrnDistance) {
