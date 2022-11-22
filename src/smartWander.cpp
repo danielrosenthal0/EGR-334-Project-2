@@ -73,8 +73,10 @@ void avoidObstacle(){
   analogWrite(blue_LED, 255);
   analogWrite(red_LED, 255);
   analogWrite(grn_LED, 255);
-
-  drive(-40,20);
+  float gain;
+  gain = 1;
+  error = inches*gain;
+  drive(error,error);
   while (!chassis.checkMotionComplete()) {delay(1);}
   turn(180,30);
   while (!chassis.checkMotionComplete()) {delay(1);}
