@@ -65,14 +65,6 @@ void turn(float ang, float speed)     //helper function to turn a set angle (deg
   chassis.turnFor(ang,speed);
 }
 
-//TO DO: Modify this function to make a unique random wander routine
-//try changing the robot speed, random number seed 
-//code that will be helpful- random(millis()) will generate a random number, to limit values
-// you can use variable commands such as int angle = randNumber % 90; which limits the values between 0 and 90 degrees
-
-
-//TO DO: Modify the Halt behavior to stop at a given distance when an obstacle is detected.
-
 
 
 //TO DO: Modify avoid Obstacle behavior with collide and avoid primitive behaviors
@@ -83,6 +75,8 @@ void avoidObstacle(){
   analogWrite(grn_LED, 255);
 
   drive(-40,20);
+  while (!chassis.checkMotionComplete()) {delay(1);}
+  turn(180,30);
   while (!chassis.checkMotionComplete()) {delay(1);}
 
 //TO DO: Robot runAway behavior to move away proportional to obstacle.
@@ -115,6 +109,13 @@ void setup() // runs this once at beginning
 
 void loop() //run continuously on the microcontroller
 {
+  srand(millis());
+  int randBlue = rand() %255;
+  int randGreen = rand() % 254;
+  int randRed = rand() % 253;
+  analogWrite(red_LED, randRed);
+  analogWrite(grn_LED, randGreen);
+  analogWrite(blue_LED, randBlue);
   readSonar();
   delay(100);                                  //read code and sonar recharge delay
   if (inches < wrnDistance) {
