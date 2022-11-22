@@ -144,38 +144,37 @@ void Collide(){
 // you have the option in your design of driving the robot away slowly or quickly
 // adjust the proportional gain for different reactions
 
-void Avoid(){
-//set proportional gain
-  //Serial.println("avoid");
-  float gain;
-  gain = 1;
-  //float integralGain;
-  //integralGain = 0.1;
-  error = inches*gain;
+// void Avoid(){
+// //set proportional gain
+//   //Serial.println("avoid");
+//   // float gain;
+//   // gain = 1;
+//   //float integralGain;
+//   //integralGain = 0.1;
+//   //error = inches*gain;
+//   analogWrite(blue_LED, 255);
+//   analogWrite(red_LED, 255);
+//   analogWrite(grn_LED, 255);
+//   //Serial.println(error);
+//   //drive(error, error);
+
+//   drive(-40,20);
+//   while (!chassis.checkMotionComplete()) {delay(1);}
+//  //for lab 3- this is where you will add your P,I,D control to your Romi (the above is for the project)
+
+// }
+
+//TO DO: Modify avoid Obstacle behavior with collide and avoid primitive behaviors
+void avoidObstacle(){ 
+  
   analogWrite(blue_LED, 255);
   analogWrite(red_LED, 255);
   analogWrite(grn_LED, 255);
   //Serial.println(error);
-  drive(-error, -error);
+  //drive(error, error);
 
- //for lab 3- this is where you will add your P,I,D control to your Romi (the above is for the project)
-
-}
-
-//TO DO: Modify avoid Obstacle behavior with collide and avoid primitive behaviors
-void avoidObstacle(){ 
-  //Serial.println("avoid obstacle");
-  analogWrite(grn_LED, 0);
-  analogWrite(blue_LED, 255);
-  analogWrite(red_LED, 255);
-  
-  if (inches < dgrDistance){
-     //TO DO: Robot collide behavior to stop before hitting an obstacle.
-    Collide();
-    //readSonar();
-   } else if (inches < wrnDistance) {
-    Avoid();
-   }
+  drive(-40,20);
+  while (!chassis.checkMotionComplete()) {delay(1);}
 //TO DO: Robot runAway behavior to move away proportional to obstacle.
 }
 
@@ -204,25 +203,18 @@ void setup() // runs this once at beginning
   
   // digitalWrite(red_LED,LOW);         //test RED LED (this will only be delayed with the delay 5000 above)
   // digitalWrite(grn_LED,LOW);         //test GREEN LED
-  robotState = ROBOT_WANDER;          //change robot state to random wander
+  //robotState = ROBOT_WANDER;          //change robot state to random wander
 
 }
 
 void loop() //run continuously on the microcontroller
 {
   readSonar();
-  //Serial.println("sonar read");
   delay(100);                                  //read code and sonar recharge delay
-//TO DO: change state after checking for obstacles
-//check for osbtacles 
-  //error = desired distance - actual distance
- //if obstacle change robot state to avoid obstacle else ROBOT_WANDER
   if (inches < wrnDistance) {
-    error=dgrDistance-inches;
     robotState = ROBOT_AVOID;
-  } else {
-    robotState = ROBOT_WANDER;
   }
+  
 
   // A basic state machine with the three basice states to start with
   switch(robotState)
@@ -230,13 +222,13 @@ void loop() //run continuously on the microcontroller
     case ROBOT_IDLE: 
        if(chassis.checkMotionComplete()) handleMotionComplete(); 
        break;
-    case ROBOT_WANDER: 
-        randomWander();
-        robotState = ROBOT_WANDER;
-       break;
+    // case ROBOT_WANDER: 
+    //     randomWander();
+    //     robotState = ROBOT_WANDER;
+    //    break;
     case ROBOT_AVOID: 
         avoidObstacle();
-        robotState = ROBOT_WANDER;
+        //robotState = ROBOT_WANDER;
        break;
     default:
       break;
