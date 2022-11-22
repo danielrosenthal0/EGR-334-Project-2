@@ -69,100 +69,11 @@ void turn(float ang, float speed)     //helper function to turn a set angle (deg
 //try changing the robot speed, random number seed 
 //code that will be helpful- random(millis()) will generate a random number, to limit values
 // you can use variable commands such as int angle = randNumber % 90; which limits the values between 0 and 90 degrees
-void randomWander(){      //function to move robot random forward and turn
-  //RED LED OFF
-  //GREEN LED ON
-  readSonar();
-  analogWrite(grn_LED, 0);
-  analogWrite(red_LED, 0);
-  analogWrite(blue_LED, 255);
-  
-  srand(millis()); //changing the seed
-  int randomDistance = 20 + rand() % (50 - 20 + 1);
-  int randomTurn = -90 + rand() % (90 - (-90) + 1);
-  int randomTurnPos = 30 + rand() % (90 - 30 + 1); //turn positive 30 deg to 90 deg
-  int randomTurnNeg = -90 + rand() % (-30 - (-90) + 1); //turn negative 30 to negative 90
-  
-  if (inches > wrnDistance) {
-    drive(randomDistance, 20);
-    while (!chassis.checkMotionComplete()) {
-      delay(1);
-      readSonar();
-      if (inches < wrnDistance) {
-        break;
-      }
-    }
-    Serial.println(inches);
-    
-    if (randomTurn > 0) {
-      turn(randomTurnPos, 40);
-    } else {
-      turn(randomTurnNeg, 40);
-    }
-    //turn(randomTurn, 40);
-    while (!chassis.checkMotionComplete()) {
-      delay(1);
-      readSonar();
-      if (inches < wrnDistance) {
-        break;
-      }
-    }
-    
-  } else {
-    robotState = ROBOT_AVOID;
-    //Serial.println("robot avoid");
-  }
-  
 
-
-  //for Lab 3- you can simply have it drive in a straight line for now
- 
-}
 
 //TO DO: Modify the Halt behavior to stop at a given distance when an obstacle is detected.
-void Collide(){
-  //RED LED ON
-  //GREEN LED OFF
-  //stop the robot
-  //TO DO: add code to turn away from obstacle and continue moving
-  //Serial.println("collide");
-  analogWrite(red_LED, 255);
-  analogWrite(grn_LED, 255);
-  analogWrite(blue_LED, 0);
-  idle();
-  //delay(100);
-  
-  turn(90, 5*robotSpeed);
-  while (!chassis.checkMotionComplete() ) {delay(1);}
-  //delay(1000);
-  //for lab 3, Part 1- bang bang control, you can simply stop (but you can implement the turn if you want to!)
-}
 
-//TO DO: Modify the Avoid behavior to move the robot toward or away from an obstacle proportional to error
-// only engage the controller if delta error exceeds some threshold
-// the robot should slow down the closer it gets to an obstacle
-// you have the option in your design of driving the robot away slowly or quickly
-// adjust the proportional gain for different reactions
 
-// void Avoid(){
-// //set proportional gain
-//   //Serial.println("avoid");
-//   // float gain;
-//   // gain = 1;
-//   //float integralGain;
-//   //integralGain = 0.1;
-//   //error = inches*gain;
-//   analogWrite(blue_LED, 255);
-//   analogWrite(red_LED, 255);
-//   analogWrite(grn_LED, 255);
-//   //Serial.println(error);
-//   //drive(error, error);
-
-//   drive(-40,20);
-//   while (!chassis.checkMotionComplete()) {delay(1);}
-//  //for lab 3- this is where you will add your P,I,D control to your Romi (the above is for the project)
-
-// }
 
 //TO DO: Modify avoid Obstacle behavior with collide and avoid primitive behaviors
 void avoidObstacle(){ 
@@ -170,11 +81,10 @@ void avoidObstacle(){
   analogWrite(blue_LED, 255);
   analogWrite(red_LED, 255);
   analogWrite(grn_LED, 255);
-  //Serial.println(error);
-  //drive(error, error);
 
   drive(-40,20);
   while (!chassis.checkMotionComplete()) {delay(1);}
+
 //TO DO: Robot runAway behavior to move away proportional to obstacle.
 }
 
@@ -199,11 +109,7 @@ void setup() // runs this once at beginning
   analogWrite(grn_LED, 0);
   analogWrite(blue_LED, 0);
   delay(500);                           //insert delay to get robot off test stand before moving on floor
-  // //TO DO: Remove the above delay and add IR Button Commands
   
-  // digitalWrite(red_LED,LOW);         //test RED LED (this will only be delayed with the delay 5000 above)
-  // digitalWrite(grn_LED,LOW);         //test GREEN LED
-  //robotState = ROBOT_WANDER;          //change robot state to random wander
 
 }
 
@@ -222,13 +128,10 @@ void loop() //run continuously on the microcontroller
     case ROBOT_IDLE: 
        if(chassis.checkMotionComplete()) handleMotionComplete(); 
        break;
-    // case ROBOT_WANDER: 
-    //     randomWander();
-    //     robotState = ROBOT_WANDER;
-    //    break;
+   
     case ROBOT_AVOID: 
         avoidObstacle();
-        //robotState = ROBOT_WANDER;
+        robotState = ROBOT_IDLE;
        break;
     default:
       break;
