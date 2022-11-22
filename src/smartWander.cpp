@@ -21,8 +21,8 @@ float distance;                     //sonar distance in cm
 float inches;                       //sonar distance in inches
 float error;                        //error = desired - actual distance
 //TO DO: Update distances based on your Lab 3 Table 1 values
-int wrnDistance = 18;               //obstacle warning distance
-int dgrDistance = 12;               //obstacle danger distance
+int wrnDistance = 14;               //obstacle warning distance
+int dgrDistance = 8;               //obstacle danger distance
 
 enum ROBOT_STATE {ROBOT_IDLE, ROBOT_WANDER,ROBOT_AVOID}; // Define the robot states
 ROBOT_STATE robotState = ROBOT_IDLE;  // initialze robt in wander state
@@ -86,7 +86,7 @@ void randomWander(){      //function to move robot random forward and turn
   if (inches > wrnDistance) {
     drive(randomDistance, 20);
     while (!chassis.checkMotionComplete()) {
-      delay(1);
+      delay(10);
       readSonar();
       if (inches < wrnDistance) {
         break;
@@ -101,7 +101,7 @@ void randomWander(){      //function to move robot random forward and turn
     }
     //turn(randomTurn, 40);
     while (!chassis.checkMotionComplete()) {
-      delay(1);
+      delay(10);
       readSonar();
       if (inches < wrnDistance) {
         break;
